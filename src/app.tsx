@@ -1,8 +1,5 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import Workspace from './components/workspace';
 
-const Index = () => {
-  return <div>Hello React!</div>;
-};
-
-ReactDOM.render(<Index />, document.getElementById('app'));
+ReactDOM.render(<Workspace />, document.getElementById('app'));
