@@ -12,6 +12,15 @@ const rules = [
     ]
   },
   {
+    test: /\.s?css$/,
+    exclude: /node_modules/,
+    use: [
+      { loader: 'style-loader' },
+      { loader: 'css-loader' },
+      { loader: 'sass-loader' }
+    ]
+  },
+  {
     enforce: 'pre',
     test: /\.js$/,
     loader: 'source-map-loader'
@@ -37,6 +46,7 @@ module.exports = [
     mode: 'development',
     entry: './src/app.tsx',
     devtool: 'source-map',
+    target: 'electron-renderer',
     module: { rules },
     output: {
       path: outputPath,

@@ -13,7 +13,7 @@ function buildMenu(collectionLoaded = false) {
       label: 'File',
       submenu: [
         {
-          label: 'Close Collection',
+          label: 'Close Workspace',
           enabled: collectionLoaded,
           click() {
             win.webContents.send('close-collection');
