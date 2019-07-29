@@ -4,12 +4,12 @@ import { css, jsx } from '@emotion/core';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import RequestComponent from './request';
-import RequestList from './requestList';
+import RequestList from './request-list';
 import Workspace from '../models/workspace';
 import WorkspaceRepo from '../data/workspaceRepository';
 import Request from '../models/request';
 
-const drawerWidth = '250px';
+import * as styles from './workspace.m.scss';
 
 export interface IWorkspaceProps {
   filePath: string;
@@ -41,23 +41,8 @@ export default class WorkspaceComponent extends React.Component<
 
   public render() {
     return (
-      <div
-        css={css`
-          display: flex;
-        `}
-      >
-        <Drawer
-          css={css`
-            width: ${drawerWidth};
-            flex-shrink: 0;
-
-            & > div {
-              width: ${drawerWidth};
-            }
-          `}
-          variant="permanent"
-          anchor="left"
-        >
+      <div className={styles.workspace}>
+        <Drawer className={styles.drawer} variant="permanent" anchor="left">
           <div />
           <Divider />
           <RequestList
@@ -66,18 +51,9 @@ export default class WorkspaceComponent extends React.Component<
             selected={this.state.selectedRequest}
           />
         </Drawer>
-        <main
-          css={css`
-            width: 100%;
-          `}
-        >
-          <RequestComponent
-            css={css`
-              flex-grow: 1;
-            `}
-            request={this.state.selectedRequest}
-          />
-        </main>
+        <div className={styles.request}>
+          <RequestComponent request={this.state.selectedRequest} />
+        </div>
       </div>
     );
   }

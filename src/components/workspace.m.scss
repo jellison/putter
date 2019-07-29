@@ -1,0 +1,17 @@
+$drawerWidth: 250px;
+
+.workspace {
+  display: flex;
+
+  .drawer {
+    width: $drawerWidth;
+
+    & > div {
+      width: $drawerWidth;
+    }
+  }
+
+  .request {
+    flex-grow: 1;
+  }
+}
