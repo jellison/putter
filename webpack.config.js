@@ -11,12 +11,21 @@ const rules = [
       }
     ]
   },
-  {
-    test: /\.s?css$/,
+  { // Processes all css-modules sass files (*.m.scss)
+    test: /\.m.scss$/,
     exclude: /node_modules/,
     use: [
       { loader: 'style-loader' },
       { loader: 'css-loader', options: { modules: true } },
+      { loader: 'sass-loader' }
+    ]
+  },
+  { // Processes all non-module (i.e., global) sass files
+    test: /.scss$/,
+    exclude: [/node_modules/, /\.m\.scss$/],
+    use: [
+      { loader: 'style-loader' },
+      { loader: 'css-loader' },
       { loader: 'sass-loader' }
     ]
   },
@@ -32,7 +41,6 @@ module.exports = [
   {
     mode: 'development',
     entry: './src/electron.ts',
-    target: 'electron-renderer',
     devtool: 'source-map',
     target: 'electron-main',
     module: { rules },

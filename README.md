@@ -36,7 +36,11 @@ npm t
 
 ## Styling
 
-Two complimentary methods of styling are available depending on the need. For static styling, use CSS Modules; for dynamic styling, use Emotion.
+Three complimentary methods of styling are available depending on the need. For global styling and mixins, Standard SASS; for module styling, use CSS Modules; for dynamic styling, use Emotion.
+
+### Standard SASS
+
+The src/styles directory houses all global styles as well as reusable mixins. To have your global styles available, simply import them into `src/styles/main.scss`. For reusable mixins, place them anywhere simply import them as normal.
 
 ### CSS Modules
 
