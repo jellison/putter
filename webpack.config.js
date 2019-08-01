@@ -52,7 +52,7 @@ module.exports = [
   // Renderer (React)
   {
     mode: 'development',
-    entry: './src/app.tsx',
+    entry: './src/react.tsx',
     devtool: 'source-map',
     target: 'electron-renderer',
     module: { rules },
@@ -62,7 +62,7 @@ module.exports = [
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './src/app.html'
+        template: './src/react.html'
       })
     ],
     resolve: {

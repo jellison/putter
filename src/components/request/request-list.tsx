@@ -20,7 +20,7 @@ export default class RequestListComponent extends React.Component<
           <ListItem
             button
             key={r.id}
-            selected={r.id === this.props.selected.id}
+            selected={this.isSelected(r)}
             onClick={e => this.props.onSelected(r)}
           >
             <ListItemText primary={r.name} />
@@ -28,5 +28,11 @@ export default class RequestListComponent extends React.Component<
         ))}
       </List>
     );
+  }
+
+  private isSelected(request: Request) : boolean {
+    if(!this.props.selected) return false;
+
+    return request.id === this.props.selected.id;
   }
 }
