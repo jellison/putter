@@ -2,7 +2,7 @@ import * as React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Request from '../../models/request';
+import Request from '../../../models/request';
 
 export interface IRequestListProps {
   requests: Request[];
@@ -30,8 +30,8 @@ export default class RequestListComponent extends React.Component<
     );
   }
 
-  private isSelected(request: Request) : boolean {
-    if(!this.props.selected) return false;
+  private isSelected(request: Request): boolean {
+    if (!this.props.selected) return false;
 
     return request.id === this.props.selected.id;
   }

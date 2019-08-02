@@ -1,4 +1,4 @@
-export class AppData {
+export default class AppData {
   public static parse(value: string | object): AppData {
     const collection = new AppData();
     let raw: any;
@@ -14,9 +14,9 @@ export class AppData {
     });
   }
 
+  public lastWorkspace: string;
+
   public toString(): string {
     return JSON.stringify(this);
   }
-
-  public lastWorkspace: string;
 }

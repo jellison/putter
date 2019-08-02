@@ -16,7 +16,7 @@ function buildMenu(collectionLoaded = false) {
           label: 'Close Workspace',
           enabled: collectionLoaded,
           click() {
-            win.webContents.send('close-collection');
+            win.webContents.send('CloseWorkspace');
           }
         },
         { type: 'separator' },
@@ -66,8 +66,8 @@ function createWindow() {
 }
 
 // rebuild the menu when the collection-loaded event is received
-ipcMain.on('collection-loaded', (event: any, collectionLoaded?: boolean) => {
-  buildMenu(collectionLoaded);
+ipcMain.on('WorkspaceLoaded', () => {
+  buildMenu(true);
 });
 
 // Quit when all windows are closed.

@@ -4,7 +4,10 @@ import { promisify } from 'util';
 import Request from '../models/request';
 import Workspace from '../models/workspace';
 
+const fsExists = promisify(fs.exists);
+const fsMkDir = promisify(fs.mkdir);
 const fsReadFile = promisify(fs.readFile);
+const fsWriteFile = promisify(fs.writeFile);
 
 export default class WorkspaceRepository {
   public static async get(filePath: string): Promise<Workspace> {
@@ -20,5 +23,19 @@ export default class WorkspaceRepository {
     }
 
     return workspace;
+  }
+
+  public static async initialize(filePath: string): Promise<void> {
+    const workspacePath = path.dirname(filePath);
+    const workspaceData = new Workspace(filePath).toString();
+
+    if (!(await fsExists(workspacePath))) {
+      await fsMkDir(workspacePath);
+    }
+
+    await fsWriteFile(filePath, workspaceData, {
+      encoding: 'utf-8',
+      flag: 'w'
+    });
   }
 }

@@ -1,9 +1,8 @@
 import * as React from 'react';
+import * as styles from './workspaceSelector.m.scss';
 import { remote } from 'electron';
-
 import { Button } from '@material-ui/core';
-
-import * as styles from './workspace-empty.m.scss';
+import WorkspaceRepository from '../../../data/workspaceRepository';
 
 const { dialog } = remote;
 
@@ -11,9 +10,16 @@ export interface IWorkspaceEmptyProps {
   onWorkspaceSelected(filePath: string): void;
 }
 
-export default class WorkspaceEmpty extends React.Component<
+export default class WorkspaceSelector extends React.Component<
   IWorkspaceEmptyProps
 > {
+  public onCreateWorkSpace() {
+    dialog.showSaveDialog({}, async fileName => {
+      await WorkspaceRepository.initialize(fileName);
+      this.props.onWorkspaceSelected(fileName);
+    });
+  }
+
   public onOpenWorkspace() {
     dialog.showOpenDialog(
       {
@@ -40,7 +46,14 @@ export default class WorkspaceEmpty extends React.Component<
 
   public render() {
     return (
-      <div className={styles.workspaceEmpty}>
+      <div className={styles.main}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => this.onCreateWorkSpace()}
+        >
+          New Workspace
+        </Button>
         <Button
           variant="contained"
           color="primary"

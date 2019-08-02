@@ -2,7 +2,7 @@ import { remote } from 'electron';
 import { exists, readFile, writeFile } from 'fs';
 import * as path from 'path';
 import { promisify } from 'util';
-import { AppData } from '../models/appData';
+import AppData from '../models/appData';
 
 const fsExists = promisify(exists);
 const fsReadFile = promisify(readFile);
@@ -22,8 +22,10 @@ export default class AppDataRepository {
   }
 
   public static async save(appData: AppData): Promise<void> {
-    const appDataPath =  this.getAppDataPath();
-    await fsWriteFile(appDataPath, appData.toString(), 'utf8');
+    await fsWriteFile(this.getAppDataPath(), appData.toString(), {
+      encoding: 'utf8',
+      flag: 'w'
+    });
   }
 
   private static getAppDataPath(): string {

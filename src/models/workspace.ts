@@ -25,10 +25,17 @@ export default class Workspace {
   }
 
   public path: string;
-  public title: string;
+  public title: string = 'Workspace';
   public requests: Request[] = [];
 
   constructor(filePath: string) {
     this.path = filePath;
+  }
+
+  public toString(): string {
+    return JSON.stringify({
+      title: this.title,
+      requests: this.requests.map(r => r.id)
+    });
   }
 }

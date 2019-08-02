@@ -1,60 +1,86 @@
 import * as React from 'react';
-
+import * as styles from './app.m.scss';
 import AppDataRepo from '../data/appDataRepository';
 import Workspace from '../models/workspace';
-import WorkspaceComponent from './workspace/workspace';
-
-import * as styles from './app.m.scss';
+import WorkspaceView from './workspace/view/workspaceView';
 import WorkspaceRepo from '../data/workspaceRepository';
-import WorkspaceEmpty from './workspace/workspace-empty';
+import WorkspaceSelector from './workspace/selector/workspaceSelector';
+import AppData from '../models/appData';
+import { Dispatch, EventService, Event } from '../services/eventService';
 
 export interface IAppState {
-  workspace?: Workspace
+  workspace?: Workspace;
+  appData: AppData;
 }
 
 export default class AppComponent extends React.Component<{}, IAppState> {
-  constructor(props = {}){
+  private eventService: EventService;
+
+  constructor(props = {}) {
     super(props);
-    this.state = {};
+
+    this.eventService = new EventService();
+    this.eventService.onDispatch(Dispatch.CloseWorkspace, () =>
+      this.closeWorkspace()
+    );
+
+    this.state = {
+      appData: new AppData()
+    };
   }
 
   public async componentDidMount(): Promise<void> {
     // todo: display loader while we're waiting
     const appData = await AppDataRepo.get();
 
-    if(appData.lastWorkspace) {
-      this.open(appData.lastWorkspace);
+    if (appData.lastWorkspace) {
+      this.openWorkspace(appData.lastWorkspace);
     }
+
+    this.setState({ appData });
   }
 
   public async onWorkspaceSelected(filePath: string): Promise<void> {
-    await this.open(filePath);
+    await this.openWorkspace(filePath);
+
+    if (filePath !== this.state.appData.lastWorkspace) {
+      this.state.appData.lastWorkspace = filePath;
+      await this.saveAppData();
+    }
   }
 
   public render() {
-    if(this.state.workspace) {
+    if (this.state.workspace) {
       return (
-        <div className={styles.app}>
-          <WorkspaceComponent workspace={this.state.workspace} />
+        <div className={styles.main}>
+          <WorkspaceView workspace={this.state.workspace} />
         </div>
       );
     } else {
       return (
-        <div className={styles.app}>
-          <WorkspaceEmpty onWorkspaceSelected={f => this.onWorkspaceSelected(f)} />
+        <div className={styles.main}>
+          <WorkspaceSelector
+            onWorkspaceSelected={f => this.onWorkspaceSelected(f)}
+          />
         </div>
       );
     }
-
   }
 
-  private async open(filePath: string): Promise<void> {
+  private async openWorkspace(filePath: string): Promise<void> {
     await WorkspaceRepo.get(filePath).then(ws => {
       this.setState({ workspace: ws });
+      this.eventService.emit(Event.WorkspaceLoaded);
     });
-    await AppDataRepo.get().then(async appData => {
-      appData.lastWorkspace = filePath;
-      await AppDataRepo.save(appData);
-    })
+  }
+
+  private async closeWorkspace(): Promise<void> {
+    this.setState({ workspace: null });
+    this.state.appData.lastWorkspace = null;
+    await this.saveAppData();
+  }
+
+  private async saveAppData() {
+    await AppDataRepo.save(this.state.appData);
   }
 }
