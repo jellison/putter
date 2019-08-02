@@ -14,5 +14,9 @@ export class AppData {
     });
   }
 
+  public toString(): string {
+    return JSON.stringify(this);
+  }
+
   public lastWorkspace: string;
 }

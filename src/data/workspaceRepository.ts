@@ -15,7 +15,7 @@ export default class WorkspaceRepository {
     const requestDir = path.join(workspacePath, 'requests');
     for (const r of workspaceData.requests) {
       const requestPath = path.join(requestDir, `${r}.json`);
-      const requestData = await fsReadFile(requestPath, 'utf-8');
+      const requestData = await fsReadFile(requestPath, 'utf8');
       workspace.requests.push(Request.parse(requestData));
     }
 
