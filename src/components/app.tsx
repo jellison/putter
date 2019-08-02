@@ -52,5 +52,9 @@ export default class AppComponent extends React.Component<{}, IAppState> {
     await WorkspaceRepo.get(filePath).then(ws => {
       this.setState({ workspace: ws });
     });
+    await AppDataRepo.get().then(async appData => {
+      appData.lastWorkspace = filePath;
+      await AppDataRepo.save(appData);
+    })
   }
 }
