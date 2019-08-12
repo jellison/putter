@@ -44,15 +44,19 @@ The src/styles directory houses all global styles as well as reusable mixins. To
 
 ### CSS Modules
 
-Webpack is configured to properly insert scoped styles for '\*.m.scss' [Sass](https://sass-lang.com/) files. Consume them as you would any other [CSS Module](https://github.com/css-modules/css-modules). The TypeScript plugin [css-module-types](https://github.com/timothykang/css-module-types#readme) is provided to assist the in-editor development experience (mileage will vary).
+Webpack is configured to properly insert scoped styles for '\*.m.scss' [Sass](https://sass-lang.com/) files. Consume them as you would any other [CSS Module](https://github.com/css-modules/css-modules). The TypeScript plugin [css-module-types](https://github.com/timothykang/css-module-types#readme) is provided to assist the in-editor development experience (mileage will vary). Combined with the [classnames](https://jedwatson.github.io/classnames/) package, building styles is quite easy.
 
 Consider the following example:
 
 _myModule.m.scss_
 
 ```css
-.myClass {
+.listItem {
   display: block;
+
+  &.first {
+    background-color: #000;
+  }
 }
 ```
 
@@ -60,11 +64,25 @@ _myModule.tsx_
 
 ```javascript
 import * as styles from './myModule.m.scss';
+import classnames from 'classnames';
 
 ...
 
-return (<div className={styles.myClass}>...</div>)
+return (<div className={classnames(
+              styles.listItem,                    // static styles from local module
+              'menu-list-item',                   // static classes from global styles (i.e., bootstrap)
+              {
+                active: this.isActive(i),         // dynamically assigned fixed classname based on properties
+                [styles.first]: this.isFirst(i)   // dynamically assigned classname from local module
+              }
+            )}>...</div>)
 ```
+
+#### Notes
+
+- Using CSS Modules isn't entirely straight-forward. Consider what the package is doing: transforming all class names into random, unique names instead; a classname of `listItem` will be become `_1fkNTkM0LgU7mgfwAhERRD`; you **cannot** access the styles by the `listeItem` in any capacity. Likewise, any other classnames nested beneath `listItem` will also be transformed.
+
+- Unfortunately, [BEM](http://getbem.com/) with its dashes is utterly incompatible with javascript identifiers (there are workarounds, but still). Please stick to camelCase class names for ease of use. Relevant [css-loader option](https://github.com/webpack-contrib/css-loader#localsconvention)
 
 ### Emotion
 
