@@ -1,7 +1,6 @@
 import * as React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import * as styles from './requestList.m.scss';
+import classnames from 'classnames';
 import Request from '../../../models/request';
 
 export interface IRequestListProps {
@@ -15,18 +14,23 @@ export default class RequestListComponent extends React.Component<
 > {
   public render() {
     return (
-      <List>
-        {this.props.requests.map((r, i) => (
-          <ListItem
-            button
-            key={r.id}
-            selected={this.isSelected(r)}
-            onClick={e => this.props.onSelected(r)}
-          >
-            <ListItemText primary={r.name} />
-          </ListItem>
-        ))}
-      </List>
+      <div id={styles.main}>
+        <div className={classnames(styles.list, 'list-group')}>
+          {this.props.requests.map((r, i) => (
+            <button
+              key={r.id}
+              className={classnames(
+                styles.listItem,
+                'list-group-item list-group-item-action',
+                { active: this.isSelected(r) }
+              )}
+              onClick={() => this.props.onSelected(r)}
+            >
+              {r.name}
+            </button>
+          ))}
+        </div>
+      </div>
     );
   }
 

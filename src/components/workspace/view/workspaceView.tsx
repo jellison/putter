@@ -1,7 +1,4 @@
 import * as React from 'react';
-import Drawer from '@material-ui/core/Drawer';
-import { Divider } from '@material-ui/core';
-
 import Request from '../../../models/request';
 import RequestView from '../../request/view/requestView';
 import RequestList from '../../request/list/requestList';
@@ -44,18 +41,18 @@ export default class WorkspaceView extends React.Component<
 
   public render() {
     return (
-      <div className={styles.main}>
-        <Drawer className={styles.drawer} variant="permanent" anchor="left">
-          <div />
-          <Divider />
-          <RequestList
-            requests={this.props.workspace.requests}
-            onSelected={e => this.onRequestSelected(e)}
-            selected={this.state.selectedRequest}
-          />
-        </Drawer>
-        <div className={styles.request}>
-          <RequestView request={this.state.selectedRequest} />
+      <div id={styles.main} className="container-fluid">
+        <div className="row no-gutters">
+          <nav className="col-md-2">
+            <RequestList
+              requests={this.props.workspace.requests}
+              onSelected={e => this.onRequestSelected(e)}
+              selected={this.state.selectedRequest}
+            />
+          </nav>
+          <main className="col-md-10">
+            <RequestView request={this.state.selectedRequest} />
+          </main>
         </div>
       </div>
     );

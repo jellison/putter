@@ -11,8 +11,13 @@ const rules = [
       }
     ]
   },
-  { // Processes all css-modules sass files (*.m.scss)
-    test: /\.m.scss$/,
+  {
+    test: /\.css$/,
+    use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
+  },
+  {
+    // Processes all css-modules sass files (*.m.scss)
+    test: /\.m\.scss$/,
     exclude: /node_modules/,
     use: [
       { loader: 'style-loader' },
@@ -20,8 +25,9 @@ const rules = [
       { loader: 'sass-loader' }
     ]
   },
-  { // Processes all non-module (i.e., global) sass files
-    test: /.scss$/,
+  {
+    // Processes all non-module (i.e., global) sass files
+    test: /\.scss$/,
     exclude: [/node_modules/, /\.m\.scss$/],
     use: [
       { loader: 'style-loader' },

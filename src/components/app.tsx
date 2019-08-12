@@ -8,6 +8,17 @@ import WorkspaceSelector from './workspace/selector/workspaceSelector';
 import AppData from '../models/appData';
 import { Dispatch, EventService, Event } from '../services/eventService';
 
+//
+// Bootstrap setup
+//
+
+// tslint:disable-next-line:no-var-requires
+require('jquery/dist/jquery.slim.js');
+// tslint:disable-next-line:no-var-requires
+require('bootstrap/dist/js/bootstrap.bundle.min.js');
+// tslint:disable-next-line:no-var-requires
+require('bootstrap/dist/css/bootstrap.css');
+
 export interface IAppState {
   workspace?: Workspace;
   appData: AppData;

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as styles from './workspaceSelector.m.scss';
 import { remote } from 'electron';
-import { Button } from '@material-ui/core';
 import WorkspaceRepository from '../../../data/workspaceRepository';
 
 const { dialog } = remote;
@@ -47,20 +46,18 @@ export default class WorkspaceSelector extends React.Component<
   public render() {
     return (
       <div className={styles.main}>
-        <Button
-          variant="contained"
-          color="primary"
+        <button
+          className="btn btn-primary"
           onClick={() => this.onCreateWorkSpace()}
         >
           New Workspace
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
+        </button>
+        <button
+          className="btn btn-primary"
           onClick={() => this.onOpenWorkspace()}
         >
           Open Workspace
-        </Button>
+        </button>
       </div>
     );
   }
