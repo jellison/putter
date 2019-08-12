@@ -1,0 +1,10 @@
+.main {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  button + button {
+    margin-left: 10px;
+  }
+}

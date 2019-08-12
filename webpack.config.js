@@ -11,6 +11,24 @@ const rules = [
       }
     ]
   },
+  { // Processes all css-modules sass files (*.m.scss)
+    test: /\.m.scss$/,
+    exclude: /node_modules/,
+    use: [
+      { loader: 'style-loader' },
+      { loader: 'css-loader', options: { modules: true } },
+      { loader: 'sass-loader' }
+    ]
+  },
+  { // Processes all non-module (i.e., global) sass files
+    test: /.scss$/,
+    exclude: [/node_modules/, /\.m\.scss$/],
+    use: [
+      { loader: 'style-loader' },
+      { loader: 'css-loader' },
+      { loader: 'sass-loader' }
+    ]
+  },
   {
     enforce: 'pre',
     test: /\.js$/,
@@ -23,7 +41,6 @@ module.exports = [
   {
     mode: 'development',
     entry: './src/electron.ts',
-    target: 'electron-renderer',
     devtool: 'source-map',
     target: 'electron-main',
     module: { rules },
@@ -35,8 +52,9 @@ module.exports = [
   // Renderer (React)
   {
     mode: 'development',
-    entry: './src/app.tsx',
+    entry: './src/react.tsx',
     devtool: 'source-map',
+    target: 'electron-renderer',
     module: { rules },
     output: {
       path: outputPath,
@@ -44,7 +62,7 @@ module.exports = [
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './src/app.html'
+        template: './src/react.html'
       })
     ],
     resolve: {

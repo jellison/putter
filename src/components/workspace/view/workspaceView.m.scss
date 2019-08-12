@@ -1,0 +1,18 @@
+$drawerWidth: 250px;
+
+.main {
+  display: flex;
+  width: 100%;
+
+  .drawer {
+    width: $drawerWidth;
+
+    & > div {
+      width: $drawerWidth;
+    }
+  }
+
+  .request {
+    flex-grow: 1;
+  }
+}
