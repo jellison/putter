@@ -1,16 +1,25 @@
+@import 'colors';
+
 #main {
-  background: white;
+  background-color: lighten($background-primary, 5%);
   border-right: 1px solid rgba(0, 0, 0, 0.125);
   height: 100%;
 
   .list {
     .listItem {
-      border-left: 0;
-      border-right: 0;
+      border: 0;
+      color: $text-primary;
+      background-color: lighten($background-primary, 5%);
 
       &:first-child,
       &:last-child {
         border-radius: 0;
+      }
+
+      &.active,
+      &:hover {
+        background-color: lighten($background-primary, 10%);
+        outline: none;
       }
     }
   }

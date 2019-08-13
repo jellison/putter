@@ -22,7 +22,7 @@ export default class RequestListComponent extends React.Component<
               className={classnames(
                 styles.listItem,
                 'list-group-item list-group-item-action',
-                { active: this.isSelected(r) }
+                { [styles.active]: this.isSelected(r) }
               )}
               onClick={() => this.props.onSelected(r)}
             >

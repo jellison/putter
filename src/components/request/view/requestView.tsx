@@ -1,4 +1,6 @@
 import * as React from 'react';
+import * as styles from './requestView.m.scss';
+import classnames from 'classnames';
 import Request from '../../../models/request';
 
 export interface IRequestComponentProps {
@@ -11,13 +13,15 @@ export default class RequestView extends React.Component<
   public render() {
     if (this.props.request) {
       return (
-        <div>
-          <nav className="navbar navbar-dark bg-primary">
-            <div className="navbar-brand">{this.props.request.name}</div>
+        <div id={styles.main}>
+          <nav className={classnames(styles.nav, 'navbar navbar-dark')}>
+            <h5>{this.props.request.name}</h5>
           </nav>
-          <div className="container">
-            <div className="row">
-              <div className="col-md-12">{this.props.request.body}</div>
+          <div className={styles.editor}>
+            <div className="container">
+              <div className="row">
+                <div className="col-md-12">{this.props.request.body}</div>
+              </div>
             </div>
           </div>
         </div>

@@ -22,7 +22,12 @@ const rules = [
     use: [
       { loader: 'style-loader' },
       { loader: 'css-loader', options: { modules: true } },
-      { loader: 'sass-loader' }
+      {
+        loader: 'sass-loader',
+        options: {
+          includePaths: ['./src/styles']
+        }
+      }
     ]
   },
   {
