@@ -16,7 +16,7 @@ export default class RequestListComponent extends React.Component<
     return (
       <div id={styles.main}>
         <div className={classnames(styles.list, 'list-group')}>
-          {this.props.requests.map((r, i) => (
+          {this.props.requests.map(r => (
             <button
               key={r.id}
               className={classnames(

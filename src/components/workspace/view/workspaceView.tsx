@@ -27,11 +27,7 @@ export default class WorkspaceView extends React.Component<
     this.selectDefaultRequest();
   }
 
-  public componentDidUpdate(
-    prevProps: Readonly<IWorkspaceProps>,
-    prevState: Readonly<IWorkspaceState>,
-    snapshot?: any
-  ): void {
+  public componentDidUpdate(prevProps: Readonly<IWorkspaceProps>): void {
     const changedWorkspace = this.props.workspace !== prevProps.workspace;
 
     if (changedWorkspace) {
@@ -51,11 +47,18 @@ export default class WorkspaceView extends React.Component<
             />
           </nav>
           <main className="col-md-10">
-            <RequestView request={this.state.selectedRequest} />
+            <RequestView
+              request={this.state.selectedRequest}
+              onChange={e => this.onRequestChanged(e)}
+            />
           </main>
         </div>
       </div>
     );
+  }
+
+  private onRequestChanged(request: Request): void {
+    this.setState({ selectedRequest: request });
   }
 
   private onRequestSelected(request: Request): void {

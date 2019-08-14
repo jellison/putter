@@ -1,0 +1,21 @@
+@import 'colors';
+@import 'fonts';
+
+#main {
+  height: 100%;
+  padding: 20px;
+
+  .editor {
+    border: 0;
+    background: transparent;
+    color: $text-primary;
+    font-family: $font-mono;
+    height: 100%;
+    resize: none;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

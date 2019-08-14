@@ -2,7 +2,7 @@
 
 #main {
   background-color: lighten($background-primary, 5%);
-  border-right: 1px solid rgba(0, 0, 0, 0.125);
+  border-right: $border-primary;
   height: 100%;
 
   .list {
