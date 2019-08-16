@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as styles from './body.m.scss';
 import Request from '../../../models/request';
+import MonacoEditor from 'react-monaco-editor';
 
 export interface IBodyProps {
   request: Request;
@@ -11,12 +12,12 @@ export default class BodyComponent extends React.Component<IBodyProps> {
   public render() {
     return (
       <div id={styles.main}>
-        <textarea
-          className={styles.editor}
+        <MonacoEditor
+          language="json"
+          theme="vs-dark"
           value={this.props.request.body}
-          onChange={e => this.onBodyChange(e)}
-          onKeyDown={e => this.onBodyKeyDown(e)}
-        ></textarea>
+          onChange={e => this.updateBody(e)}
+        />
       </div>
     );
   }

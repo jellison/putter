@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const outputPath = __dirname + '/dist';
 const rules = [
@@ -74,6 +75,9 @@ module.exports = [
     plugins: [
       new HtmlWebpackPlugin({
         template: './src/react.html'
+      }),
+      new MonacoWebpackPlugin({
+        languages: ['json']
       })
     ],
     resolve: {
