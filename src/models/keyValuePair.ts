@@ -1,3 +1,5 @@
+import { v4 as guid } from 'uuid';
+
 export default class KeyValuePair {
   public static parse(value: string | object): Request {
     const request = new KeyValuePair();
@@ -14,7 +16,12 @@ export default class KeyValuePair {
     });
   }
 
+  public id: string = null;
   public key: string = null;
   public value: string = null;
   public enabled: boolean = true;
+
+  constructor() {
+    this.id = guid();
+  }
 }

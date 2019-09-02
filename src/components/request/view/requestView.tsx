@@ -5,6 +5,7 @@ import Request from '../../../models/request';
 import Tabs from '../../../elements/tabs/tabs';
 import Tab from '../../../elements/tabs/tab';
 import Body from '../body/body';
+import Headers from '../headers/headers';
 
 export interface IRequestComponentProps {
   request?: Request;
@@ -31,7 +32,12 @@ export default class RequestView extends React.Component<
               />
             </Tab>
             <Tab name="Query">Query Params Placeholder</Tab>
-            <Tab name="Header">Headers Placeholder</Tab>
+            <Tab name="Header">
+              <Headers
+                request={this.props.request}
+                onChange={e => this.onChange(e)}
+              />
+            </Tab>
           </Tabs>
         </div>
       </div>

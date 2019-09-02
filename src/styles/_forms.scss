@@ -1,0 +1,25 @@
+@import 'colors';
+
+$editor-font-size: 90%;
+
+input.form-control, input.form-control:read-only {
+  background: transparent;
+  border-radius: 0;
+  border-width: 0;
+  border-bottom: 1px solid lighten($background-primary, 10%);
+  color: $text-primary;
+  font-size: $editor-font-size;
+
+  &:focus {
+    background: transparent;
+    border-bottom-color: #fff;
+    box-shadow: none;
+    caret-color: #fff;
+    color: $text-primary;
+    outline: none;
+  }
+}
+
+textarea.form-control {
+  font-size: $editor-font-size;
+}
