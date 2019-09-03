@@ -1,13 +1,7 @@
 import Workspace from '../../models/workspace';
 import Request from '../../models/request';
 import { ActionTypes } from './actions';
-
-const initialState = {
-  workspace: null as Workspace,
-  selectedRequest: null as Request
-};
-
-export type State = typeof initialState;
+import { initialState, State } from './store';
 
 export default function workspaceReducer(
   state: State = initialState,
@@ -24,5 +18,7 @@ export default function workspaceReducer(
         ...state,
         selectedRequest: action.request
       };
+    default:
+      return state;
   }
 }

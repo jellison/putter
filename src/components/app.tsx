@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import * as styles from './app.m.scss';
 import AppDataRepo from '../data/appDataRepository';
 import Workspace from '../models/workspace';
@@ -7,6 +8,8 @@ import WorkspaceRepo from '../data/workspaceRepository';
 import WorkspaceSelector from './workspace/selector/workspaceSelector';
 import AppData from '../models/appData';
 import { Dispatch, EventService, Event } from '../services/eventService';
+import { State } from '../stores/workspaceStore/store';
+import * as actions from '../stores/workspaceStore/actions';
 
 //
 // Bootstrap setup
@@ -19,15 +22,19 @@ require('bootstrap/dist/js/bootstrap.bundle.min.js');
 // tslint:disable-next-line:no-var-requires
 require('bootstrap/dist/css/bootstrap.css');
 
-export interface IAppState {
+export interface IAppProps {
   workspace?: Workspace;
+  setWorkspace?(workspace: Workspace): void;
+}
+
+export interface IAppState {
   appData: AppData;
 }
 
-export default class AppComponent extends React.Component<{}, IAppState> {
+class AppComponent extends React.Component<IAppProps, IAppState> {
   private eventService: EventService;
 
-  constructor(props = {}) {
+  constructor(props: IAppProps) {
     super(props);
 
     this.eventService = new EventService();
@@ -61,10 +68,10 @@ export default class AppComponent extends React.Component<{}, IAppState> {
   }
 
   public render() {
-    if (this.state.workspace) {
+    if (this.props.workspace) {
       return (
         <div className={styles.main}>
-          <WorkspaceView workspace={this.state.workspace} />
+          <WorkspaceView workspace={this.props.workspace} />
         </div>
       );
     } else {
@@ -80,13 +87,13 @@ export default class AppComponent extends React.Component<{}, IAppState> {
 
   private async openWorkspace(filePath: string): Promise<void> {
     await WorkspaceRepo.get(filePath).then(ws => {
-      this.setState({ workspace: ws });
+      this.props.setWorkspace(ws);
       this.eventService.emit(Event.WorkspaceLoaded);
     });
   }
 
   private async closeWorkspace(): Promise<void> {
-    this.setState({ workspace: null });
+    this.props.setWorkspace(null);
     this.state.appData.lastWorkspace = null;
     await this.saveAppData();
   }
@@ -95,3 +102,18 @@ export default class AppComponent extends React.Component<{}, IAppState> {
     await AppDataRepo.save(this.state.appData);
   }
 }
+
+function mapStateToProps(state: State): IAppProps {
+  return {
+    workspace: state.workspace
+  };
+}
+
+const mapDispatchToProps = {
+  setWorkspace: actions.setWorkspace
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppComponent);
