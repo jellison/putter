@@ -6,10 +6,7 @@ import Request from './request';
 const fsReadFile = promisify(readFile);
 
 export default class Workspace {
-  public static async parse(
-    value: string | object,
-    filePath: string
-  ): Promise<Workspace> {
+  public static async parse(value: string | object, filePath: string): Promise<Workspace> {
     const workspace = new Workspace(filePath);
     let raw: any;
 

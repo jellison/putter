@@ -15,6 +15,4 @@ export function updateRequest(request: Request) {
   } as const;
 }
 
-export type ActionTypes = ReturnType<
-  typeof setWorkspace | typeof updateRequest
->;
+export type ActionTypes = ReturnType<typeof setWorkspace | typeof updateRequest>;

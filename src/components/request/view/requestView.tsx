@@ -11,9 +11,7 @@ export interface IRequestComponentProps {
   onChange?(request: Request): void;
 }
 
-export default class RequestView extends React.Component<
-  IRequestComponentProps
-> {
+export default class RequestView extends React.Component<IRequestComponentProps> {
   public render() {
     if (!this.props.request) return null;
 
@@ -25,10 +23,7 @@ export default class RequestView extends React.Component<
         <div className={styles.editor}>
           <Tabs>
             <Tab name="Body">
-              <Body
-                request={this.props.request}
-                onChange={e => this.onChange(e)}
-              />
+              <Body request={this.props.request} onChange={e => this.onChange(e)} />
             </Tab>
             <Tab name="Query">Query Params Placeholder</Tab>
             <Tab name="Header">Headers Placeholder</Tab>

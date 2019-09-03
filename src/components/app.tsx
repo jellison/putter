@@ -38,9 +38,7 @@ class AppComponent extends React.Component<IAppProps, IAppState> {
     super(props);
 
     this.eventService = new EventService();
-    this.eventService.onDispatch(Dispatch.CloseWorkspace, () =>
-      this.closeWorkspace()
-    );
+    this.eventService.onDispatch(Dispatch.CloseWorkspace, () => this.closeWorkspace());
 
     this.state = {
       appData: new AppData()
@@ -77,9 +75,7 @@ class AppComponent extends React.Component<IAppProps, IAppState> {
     } else {
       return (
         <div className={styles.main}>
-          <WorkspaceSelector
-            onWorkspaceSelected={f => this.onWorkspaceSelected(f)}
-          />
+          <WorkspaceSelector onWorkspaceSelected={f => this.onWorkspaceSelected(f)} />
         </div>
       );
     }

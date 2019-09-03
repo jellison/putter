@@ -9,9 +9,7 @@ export interface IRequestListProps {
   onSelected?(request: Request): void;
 }
 
-export default class RequestListComponent extends React.Component<
-  IRequestListProps
-> {
+export default class RequestListComponent extends React.Component<IRequestListProps> {
   public render() {
     return (
       <div id={styles.main}>
@@ -19,11 +17,9 @@ export default class RequestListComponent extends React.Component<
           {this.props.requests.map(r => (
             <button
               key={r.id}
-              className={classnames(
-                styles.listItem,
-                'list-group-item list-group-item-action',
-                { [styles.active]: this.isSelected(r) }
-              )}
+              className={classnames(styles.listItem, 'list-group-item list-group-item-action', {
+                [styles.active]: this.isSelected(r)
+              })}
               onClick={() => this.props.onSelected(r)}
             >
               {r.name}

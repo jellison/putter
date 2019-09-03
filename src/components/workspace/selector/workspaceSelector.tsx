@@ -5,13 +5,11 @@ import WorkspaceRepository from '../../../data/workspaceRepository';
 
 const { dialog } = remote;
 
-export interface IWorkspaceEmptyProps {
+export interface IWorkspaceSelector {
   onWorkspaceSelected(filePath: string): void;
 }
 
-export default class WorkspaceSelector extends React.Component<
-  IWorkspaceEmptyProps
-> {
+export default class WorkspaceSelector extends React.Component<IWorkspaceSelector> {
   public onCreateWorkSpace() {
     dialog.showSaveDialog({}, async fileName => {
       await WorkspaceRepository.initialize(fileName);
@@ -46,16 +44,10 @@ export default class WorkspaceSelector extends React.Component<
   public render() {
     return (
       <div className={styles.main}>
-        <button
-          className="btn btn-primary"
-          onClick={() => this.onCreateWorkSpace()}
-        >
+        <button className="btn btn-primary" onClick={() => this.onCreateWorkSpace()}>
           New Workspace
         </button>
-        <button
-          className="btn btn-primary"
-          onClick={() => this.onOpenWorkspace()}
-        >
+        <button className="btn btn-primary" onClick={() => this.onOpenWorkspace()}>
           Open Workspace
         </button>
       </div>

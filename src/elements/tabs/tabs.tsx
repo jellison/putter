@@ -48,9 +48,7 @@ export default class Tabs extends React.Component<ITabsProps, ITabsState> {
           ))}
         </ul>
 
-        <div className={styles.tabContent}>
-          {this.props.children[this.state.selectedTabIndex].props.children}
-        </div>
+        <div className={styles.tabContent}>{this.props.children[this.state.selectedTabIndex].props.children}</div>
       </div>
     );
   }

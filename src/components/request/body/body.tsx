@@ -34,9 +34,7 @@ export default class BodyComponent extends React.Component<IBodyProps> {
       const start = input.selectionStart;
       const end = input.selectionEnd;
 
-      input.value = `${input.value.substr(0, start)}\t${input.value.substr(
-        end
-      )}`;
+      input.value = `${input.value.substr(0, start)}\t${input.value.substr(end)}`;
       input.selectionStart = input.selectionEnd = start + 1;
     }
   }

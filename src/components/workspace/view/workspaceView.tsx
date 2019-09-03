@@ -14,10 +14,7 @@ export interface IWorkspaceState {
   selectedRequest?: Request;
 }
 
-export default class WorkspaceView extends React.Component<
-  IWorkspaceProps,
-  IWorkspaceState
-> {
+export default class WorkspaceView extends React.Component<IWorkspaceProps, IWorkspaceState> {
   constructor(props: IWorkspaceProps) {
     super(props);
     this.state = {};
@@ -47,10 +44,7 @@ export default class WorkspaceView extends React.Component<
             />
           </nav>
           <main className="col-md-10">
-            <RequestView
-              request={this.state.selectedRequest}
-              onChange={e => this.onRequestChanged(e)}
-            />
+            <RequestView request={this.state.selectedRequest} onChange={e => this.onRequestChanged(e)} />
           </main>
         </div>
       </div>
