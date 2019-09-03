@@ -3,7 +3,7 @@ import Request from '../../models/request';
 
 export function setWorkspace(workspace: Workspace) {
   return {
-    type: 'UPDATE_WORKSPACE',
+    type: 'SET_WORKSPACE',
     workspace
   } as const;
 }

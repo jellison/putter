@@ -1,20 +1,26 @@
-import Workspace from '../../models/workspace';
-import Request from '../../models/request';
-import { ActionTypes } from './actions';
+import * as actions from './actions';
 import { initialState, State } from './store';
 
-export default function workspaceReducer(state: State = initialState, action: ActionTypes): State {
+function setWorkspace(state: State, action: ReturnType<typeof actions.setWorkspace>): State {
+  return {
+    ...initialState,
+    workspace: action.workspace
+  };
+}
+
+function updateRequest(state: State, action: ReturnType<typeof actions.updateRequest>): State {
+  return {
+    ...state,
+    selectedRequest: action.request
+  };
+}
+
+export default function workspaceReducer(state: State = initialState, action: actions.ActionTypes): State {
   switch (action.type) {
-    case 'UPDATE_WORKSPACE':
-      return {
-        ...initialState,
-        workspace: action.workspace
-      };
+    case 'SET_WORKSPACE':
+      return setWorkspace(state, action);
     case 'UPDATE_REQUEST':
-      return {
-        ...state,
-        selectedRequest: action.request
-      };
+      return updateRequest(state, action);
     default:
       return state;
   }
