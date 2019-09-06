@@ -69,7 +69,7 @@ class AppComponent extends React.Component<IAppProps, IAppState> {
     if (this.props.workspace) {
       return (
         <div className={styles.main}>
-          <WorkspaceView workspace={this.props.workspace} />
+          <WorkspaceView />
         </div>
       );
     } else {
@@ -106,7 +106,7 @@ function mapStateToProps(state: State): IAppProps {
 }
 
 const mapDispatchToProps = {
-  setWorkspace: actions.setWorkspace
+  setWorkspace: actions.selectWorkspace
 };
 
 export default connect(

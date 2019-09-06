@@ -1,13 +1,17 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import * as styles from './body.m.scss';
 import Request from '../../../models/request';
+import { State } from '../../../stores/workspaceStore/store';
+import * as actions from '../../../stores/workspaceStore/actions';
+import { IRequestComponentProps } from '../view/requestView';
 
 export interface IBodyProps {
   request: Request;
   onChange?(request: Request): void;
 }
 
-export default class BodyComponent extends React.Component<IBodyProps> {
+class Body extends React.Component<IBodyProps> {
   public render() {
     return (
       <div id={styles.main}>
@@ -16,7 +20,7 @@ export default class BodyComponent extends React.Component<IBodyProps> {
           value={this.props.request.body}
           onChange={e => this.onBodyChange(e)}
           onKeyDown={e => this.onBodyKeyDown(e)}
-        ></textarea>
+        />
       </div>
     );
   }
@@ -48,3 +52,18 @@ export default class BodyComponent extends React.Component<IBodyProps> {
     }
   }
 }
+
+function mapStateToProps(state: State): IRequestComponentProps {
+  return {
+    request: state.selectedRequest
+  };
+}
+
+const mapDispatchToProps = {
+  onChange: actions.updateRequest
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Body);

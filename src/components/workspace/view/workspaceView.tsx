@@ -1,23 +1,21 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import Request from '../../../models/request';
 import RequestView from '../../request/view/requestView';
 import RequestList from '../../request/list/requestList';
 import Workspace from '../../../models/workspace';
-
 import * as styles from './workspaceView.m.scss';
+import { State } from '../../../stores/workspaceStore/store';
+import * as actions from '../../../stores/workspaceStore/actions';
 
 export interface IWorkspaceProps {
   workspace: Workspace;
+  setSelectedRequest?(request: Request): void;
 }
 
-export interface IWorkspaceState {
-  selectedRequest?: Request;
-}
-
-export default class WorkspaceView extends React.Component<IWorkspaceProps, IWorkspaceState> {
+class WorkspaceView extends React.Component<IWorkspaceProps> {
   constructor(props: IWorkspaceProps) {
     super(props);
-    this.state = {};
   }
 
   public componentDidMount(): void {
@@ -37,31 +35,34 @@ export default class WorkspaceView extends React.Component<IWorkspaceProps, IWor
       <div id={styles.main} className="container-fluid">
         <div className="row no-gutters">
           <nav className="col-md-2">
-            <RequestList
-              requests={this.props.workspace.requests}
-              onSelected={e => this.onRequestSelected(e)}
-              selected={this.state.selectedRequest}
-            />
+            <RequestList />
           </nav>
           <main className="col-md-10">
-            <RequestView request={this.state.selectedRequest} onChange={e => this.onRequestChanged(e)} />
+            <RequestView />
           </main>
         </div>
       </div>
     );
   }
 
-  private onRequestChanged(request: Request): void {
-    this.setState({ selectedRequest: request });
-  }
-
-  private onRequestSelected(request: Request): void {
-    this.setState({ selectedRequest: request });
-  }
-
   private selectDefaultRequest(): void {
-    if (this.props.workspace.requests.length === 0) return;
-
-    this.setState({ selectedRequest: this.props.workspace.requests[0] });
+    if (this.props.workspace.requests.length > 0) {
+      this.props.setSelectedRequest(this.props.workspace.requests[0]);
+    }
   }
 }
+
+function mapStateToProps(state: State): IWorkspaceProps {
+  return {
+    workspace: state.workspace
+  };
+}
+
+const mapDispatchToProps = {
+  setSelectedRequest: actions.selectRequest
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WorkspaceView);

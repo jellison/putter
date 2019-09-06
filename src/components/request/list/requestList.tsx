@@ -1,15 +1,18 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import * as styles from './requestList.m.scss';
 import classnames from 'classnames';
 import Request from '../../../models/request';
+import { State } from '../../../stores/workspaceStore/store';
+import * as actions from '../../../stores/workspaceStore/actions';
 
 export interface IRequestListProps {
   requests: Request[];
-  selected?: Request;
+  selectedRequest: Request;
   onSelected?(request: Request): void;
 }
 
-export default class RequestListComponent extends React.Component<IRequestListProps> {
+class RequestList extends React.Component<IRequestListProps> {
   public render() {
     return (
       <div id={styles.main}>
@@ -31,8 +34,24 @@ export default class RequestListComponent extends React.Component<IRequestListPr
   }
 
   private isSelected(request: Request): boolean {
-    if (!this.props.selected) return false;
+    if (!this.props.selectedRequest) return false;
 
-    return request.id === this.props.selected.id;
+    return request.id === this.props.selectedRequest.id;
   }
 }
+
+function mapStateToProps(state: State): IRequestListProps {
+  return {
+    requests: state.workspace.requests,
+    selectedRequest: state.selectedRequest
+  };
+}
+
+const mapDispatchToProps = {
+  onSelected: actions.selectRequest
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RequestList);

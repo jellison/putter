@@ -1,10 +1,17 @@
 import Workspace from '../../models/workspace';
 import Request from '../../models/request';
 
-export function setWorkspace(workspace: Workspace) {
+export function selectWorkspace(workspace: Workspace) {
   return {
-    type: 'SET_WORKSPACE',
+    type: 'SELECT_WORKSPACE',
     workspace
+  } as const;
+}
+
+export function selectRequest(request: Request) {
+  return {
+    type: 'SELECT_REQUEST',
+    request
   } as const;
 }
 
@@ -15,4 +22,4 @@ export function updateRequest(request: Request) {
   } as const;
 }
 
-export type ActionTypes = ReturnType<typeof setWorkspace | typeof updateRequest>;
+export type ActionTypes = ReturnType<typeof selectWorkspace | typeof selectRequest | typeof updateRequest>;
