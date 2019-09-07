@@ -16,12 +16,8 @@ export default class KeyValuePair {
     });
   }
 
-  public id: string = null;
-  public key: string = null;
-  public value: string = null;
+  public id: string = guid();
+  public key: string = '';
+  public value: string = '';
   public enabled: boolean = true;
-
-  constructor() {
-    this.id = guid();
-  }
 }

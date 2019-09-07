@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as styles from './headers.m.scss';
-import classnames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheckSquare,
@@ -10,20 +9,29 @@ import {
 import Request from '../../../models/request';
 import KeyValuePair from '../../../models/keyValuePair';
 
+enum RefType {
+  Key,
+  Value
+}
+
 export interface IHeadersProps {
   request: Request;
   onChange?(request: Request): void;
 }
 
 export default class HeadersComponent extends React.Component<IHeadersProps> {
-  private addPending?: string;
-  private nodes: Map<string, React.RefObject<HTMLInputElement>> = new Map();
+  private addPending?: RefType;
+  private nodes: Array<{
+    type: RefType;
+    id: string;
+    ref: React.RefObject<HTMLInputElement>;
+  }> = [];
 
   public componentDidUpdate(prevProps: Readonly<IHeadersProps>): void {
     const headerAdded =
       prevProps.request.headers.length < this.props.request.headers.length;
 
-    if (this.addPending && headerAdded) {
+    if (this.addPending !== null && headerAdded) {
       this.findLastNode(this.addPending).focus();
       this.addPending = null;
     }
@@ -33,7 +41,7 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
     return (
       <div id={styles.main}>
         {this.props.request.headers.map((h, i) => (
-          <div className={styles.entry}>
+          <div className={styles.entry} key={i}>
             <div className={styles.field}>
               <input
                 type="text"
@@ -41,7 +49,7 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
                 placeholder="Header"
                 value={h.key}
                 onChange={e => this.onKeyChange(h, e)}
-                ref={this.getRef('key' + i)}
+                ref={this.getRef(RefType.Key, h.id)}
               />
             </div>
             <div className={styles.field}>
@@ -51,7 +59,7 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
                 placeholder="Value"
                 value={h.value}
                 onChange={e => this.onValueChange(h, e)}
-                ref={this.getRef('value' + i)}
+                ref={this.getRef(RefType.Value, h.id)}
               />
             </div>
             <div className={styles.controls}>
@@ -130,6 +138,8 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
   }
 
   private onDelete(header: KeyValuePair): void {
+    this.nodes = this.nodes.filter(n => n.id !== header.id);
+
     this.props.onChange({
       ...this.props.request,
       headers: this.props.request.headers.filter(h => h.id !== header.id)
@@ -138,13 +148,13 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
 
   private onNewKeyFocus(event: React.SyntheticEvent): void {
     event.preventDefault();
-    this.addPending = 'key';
+    this.addPending = RefType.Key;
     this.insertNewHeader();
   }
 
   private onNewValueFocus(event: React.SyntheticEvent): void {
     event.preventDefault();
-    this.addPending = 'value';
+    this.addPending = RefType.Value;
     this.insertNewHeader();
   }
 
@@ -155,22 +165,16 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
     });
   }
 
-  private findLastNode(type: string): HTMLInputElement {
-    const key = Math.max(
-      ...Array.from(this.nodes.keys())
-        .filter(k => k.startsWith(type))
-        .map(k => parseInt(k.match(/\d+/g)[0], 10))
-    );
+  private findLastNode(type: RefType): HTMLInputElement {
+    const typed = this.nodes.filter(n => n.type === type);
 
-    const ref = this.nodes.get(type + key);
-
-    return ref.current;
+    return typed[typed.length - 1].ref.current;
   }
 
-  private getRef(name: string): React.Ref<HTMLInputElement> {
+  private getRef(type: RefType, id: string): React.Ref<HTMLInputElement> {
     const ref = React.createRef<HTMLInputElement>();
 
-    this.nodes.set(name, ref);
+    this.nodes.push({ type, id, ref });
 
     return ref;
   }
