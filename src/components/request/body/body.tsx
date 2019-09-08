@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as styles from './body.m.scss';
+import classnames from 'classnames';
 import Request from '../../../models/request';
 
 export interface IBodyProps {
@@ -12,11 +13,11 @@ export default class BodyComponent extends React.Component<IBodyProps> {
     return (
       <div id={styles.main}>
         <textarea
-          className={styles.editor}
+          className={classnames(styles.editor, 'form-control')}
           value={this.props.request.body}
           onChange={e => this.onBodyChange(e)}
           onKeyDown={e => this.onBodyKeyDown(e)}
-        ></textarea>
+        />
       </div>
     );
   }

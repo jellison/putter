@@ -1,3 +1,5 @@
+import { v4 as guid } from 'uuid';
+
 export default class KeyValuePair {
   public static parse(value: string | object): Request {
     const request = new KeyValuePair();
@@ -14,7 +16,8 @@ export default class KeyValuePair {
     });
   }
 
-  public key: string = null;
-  public value: string = null;
+  public id: string = guid();
+  public key: string = '';
+  public value: string = '';
   public enabled: boolean = true;
 }

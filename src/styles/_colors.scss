@@ -2,6 +2,7 @@ $background-primary: #2e2e2b;
 $background-alternate: #fff;
 
 $text-primary: #e0e0e0;
+$text-primary-disabled: darken($text-primary, 40%);
 $text-alternate: #666;
 
 $border-primary: 1px solid #4a4b48;
