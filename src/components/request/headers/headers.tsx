@@ -31,7 +31,7 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
     const headerAdded =
       prevProps.request.headers.length < this.props.request.headers.length;
 
-    if (this.addPending !== null && headerAdded) {
+    if (this.addPending != null && headerAdded) {
       this.findLastNode(this.addPending).focus();
       this.addPending = null;
     }
@@ -167,7 +167,7 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
 
   private findLastNode(type: RefType): HTMLInputElement {
     const typed = this.nodes.filter(n => n.type === type);
-
+    
     return typed[typed.length - 1].ref.current;
   }
 
