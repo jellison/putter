@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as styles from './app.m.scss';
 import AppDataRepo from '../data/appDataRepository';
-import Workspace from '../models/workspace';
 import WorkspaceView from './workspace/view/workspaceView';
 import WorkspaceRepo from '../data/workspaceRepository';
 import WorkspaceSelector from './workspace/selector/workspaceSelector';
 import AppData from '../models/appData';
 import { Dispatch, EventService, Event } from '../services/eventService';
+import store from '../stores/workspaceStore';
+import { observer } from 'mobx-react';
 
 //
 // Bootstrap setup
@@ -20,10 +21,10 @@ require('bootstrap/dist/js/bootstrap.bundle.min.js');
 require('bootstrap/dist/css/bootstrap.css');
 
 export interface IAppState {
-  workspace?: Workspace;
   appData: AppData;
 }
 
+@observer
 export default class AppComponent extends React.Component<{}, IAppState> {
   private eventService: EventService;
 
@@ -61,10 +62,10 @@ export default class AppComponent extends React.Component<{}, IAppState> {
   }
 
   public render() {
-    if (this.state.workspace) {
+    if (store.workspace) {
       return (
         <div className={styles.main}>
-          <WorkspaceView workspace={this.state.workspace} />
+          <WorkspaceView workspace={store.workspace} />
         </div>
       );
     } else {
@@ -80,13 +81,13 @@ export default class AppComponent extends React.Component<{}, IAppState> {
 
   private async openWorkspace(filePath: string): Promise<void> {
     await WorkspaceRepo.get(filePath).then(ws => {
-      this.setState({ workspace: ws });
+      store.workspace = ws;
       this.eventService.emit(Event.WorkspaceLoaded);
     });
   }
 
   private async closeWorkspace(): Promise<void> {
-    this.setState({ workspace: null });
+    store.workspace = null;
     this.state.appData.lastWorkspace = null;
     await this.saveAppData();
   }
