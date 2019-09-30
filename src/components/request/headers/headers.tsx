@@ -1,13 +1,11 @@
 import * as React from 'react';
 import * as styles from './headers.m.scss';
+import * as _ from 'lodash';
+import { inject, observer } from 'mobx-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCheckSquare,
-  faSquare,
-  faTrashAlt
-} from '@fortawesome/free-solid-svg-icons';
-import Request from '../../../models/request';
+import { faCheckSquare, faSquare, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import KeyValuePair from '../../../models/keyValuePair';
+import RequestStore from '../../../stores/requestStore';
 
 enum RefType {
   Key,
@@ -15,10 +13,11 @@ enum RefType {
 }
 
 export interface IHeadersProps {
-  request: Request;
-  onChange?(request: Request): void;
+  store?: RequestStore;
 }
 
+@inject('store')
+@observer
 export default class HeadersComponent extends React.Component<IHeadersProps> {
   private addPending?: RefType;
   private nodes: Array<{
@@ -28,8 +27,7 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
   }> = [];
 
   public componentDidUpdate(prevProps: Readonly<IHeadersProps>): void {
-    const headerAdded =
-      prevProps.request.headers.length < this.props.request.headers.length;
+    const headerAdded = prevProps.store.request.headers.length < this.props.store.request.headers.length;
 
     if (this.addPending != null && headerAdded) {
       this.findLastNode(this.addPending).focus();
@@ -40,7 +38,7 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
   public render() {
     return (
       <div id={styles.main}>
-        {this.props.request.headers.map((h, i) => (
+        {this.props.store.request.headers.map((h, i) => (
           <div className={styles.entry} key={i}>
             <div className={styles.field}>
               <input
@@ -48,7 +46,7 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
                 className="form-control"
                 placeholder="Header"
                 value={h.key}
-                onChange={e => this.onKeyChange(h, e)}
+                onChange={e => (h.key = e.target.value)}
                 ref={this.getRef(RefType.Key, h.id)}
               />
             </div>
@@ -58,20 +56,18 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
                 className="form-control"
                 placeholder="Value"
                 value={h.value}
-                onChange={e => this.onValueChange(h, e)}
+                onChange={e => (h.value = e.target.value)}
                 ref={this.getRef(RefType.Value, h.id)}
               />
             </div>
             <div className={styles.controls}>
               <div className={styles.control}>
-                <a onClick={() => this.onToggleEnabled(h)}>
-                  <FontAwesomeIcon
-                    icon={h.enabled === true ? faCheckSquare : faSquare}
-                  />
+                <a onClick={() => (h.enabled = !h.enabled)}>
+                  <FontAwesomeIcon icon={h.enabled === true ? faCheckSquare : faSquare} />
                 </a>
               </div>
               <div className={styles.control}>
-                <a onClick={() => this.onDelete(h)}>
+                <a onClick={() => _.pull(this.props.store.request.headers, h)}>
                   <FontAwesomeIcon icon={faTrashAlt} />
                 </a>
               </div>
@@ -104,70 +100,20 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
     );
   }
 
-  private onKeyChange(
-    header: KeyValuePair,
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void {
-    this.props.onChange(
-      this.getModifiedRequest({
-        ...header,
-        key: event.target.value
-      })
-    );
-  }
-
-  private onValueChange(
-    header: KeyValuePair,
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void {
-    this.props.onChange(
-      this.getModifiedRequest({
-        ...header,
-        value: event.target.value
-      })
-    );
-  }
-
-  private onToggleEnabled(header: KeyValuePair) {
-    this.props.onChange(
-      this.getModifiedRequest({
-        ...header,
-        enabled: !header.enabled
-      })
-    );
-  }
-
-  private onDelete(header: KeyValuePair): void {
-    this.nodes = this.nodes.filter(n => n.id !== header.id);
-
-    this.props.onChange({
-      ...this.props.request,
-      headers: this.props.request.headers.filter(h => h.id !== header.id)
-    });
-  }
-
   private onNewKeyFocus(event: React.SyntheticEvent): void {
     event.preventDefault();
     this.addPending = RefType.Key;
-    this.insertNewHeader();
   }
 
   private onNewValueFocus(event: React.SyntheticEvent): void {
     event.preventDefault();
     this.addPending = RefType.Value;
-    this.insertNewHeader();
-  }
-
-  private insertNewHeader(): void {
-    this.props.onChange({
-      ...this.props.request,
-      headers: [...this.props.request.headers, new KeyValuePair()]
-    });
+    this.props.store.request.headers.push(new KeyValuePair());
   }
 
   private findLastNode(type: RefType): HTMLInputElement {
     const typed = this.nodes.filter(n => n.type === type);
-    
+
     return typed[typed.length - 1].ref.current;
   }
 
@@ -177,23 +123,5 @@ export default class HeadersComponent extends React.Component<IHeadersProps> {
     this.nodes.push({ type, id, ref });
 
     return ref;
-  }
-
-  private getModifiedRequest(header: KeyValuePair): Request {
-    const currentIndex = this.props.request.headers.findIndex(
-      h => h.id === header.id
-    );
-
-    const headers = [
-      ...this.props.request.headers.filter(h => h.id !== header.id)
-    ];
-
-    // insert the modified header back at the current index
-    headers.splice(currentIndex, 0, header);
-
-    return {
-      ...this.props.request,
-      headers
-    };
   }
 }

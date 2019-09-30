@@ -1,29 +1,27 @@
 import * as React from 'react';
 import * as styles from './body.m.scss';
+import { inject, observer } from 'mobx-react';
 import classnames from 'classnames';
-import Request from '../../../models/request';
+import RequestStore from '../../../stores/requestStore';
 
 export interface IBodyProps {
-  request: Request;
-  onChange?(request: Request): void;
+  store?: RequestStore;
 }
 
+@inject('store')
+@observer
 export default class BodyComponent extends React.Component<IBodyProps> {
   public render() {
     return (
       <div id={styles.main}>
         <textarea
           className={classnames(styles.editor, 'form-control')}
-          value={this.props.request.body}
-          onChange={e => this.onBodyChange(e)}
+          value={this.props.store.request.body}
+          onChange={e => (this.props.store.request.body = e.target.value)}
           onKeyDown={e => this.onBodyKeyDown(e)}
         />
       </div>
     );
-  }
-
-  private onBodyChange(e: React.ChangeEvent<HTMLTextAreaElement>): void {
-    this.updateBody(e.target.value);
   }
 
   private onBodyKeyDown(e: React.KeyboardEvent): void {
@@ -35,19 +33,8 @@ export default class BodyComponent extends React.Component<IBodyProps> {
       const start = input.selectionStart;
       const end = input.selectionEnd;
 
-      input.value = `${input.value.substr(0, start)}\t${input.value.substr(
-        end
-      )}`;
+      input.value = `${input.value.substr(0, start)}\t${input.value.substr(end)}`;
       input.selectionStart = input.selectionEnd = start + 1;
-    }
-  }
-
-  private updateBody(newBody: string): void {
-    if (this.props.onChange) {
-      this.props.onChange({
-        ...this.props.request,
-        body: newBody
-      });
     }
   }
 }
